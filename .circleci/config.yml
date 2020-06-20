@@ -53,8 +53,8 @@ workflows:
     jobs:
       - build
       - build_image:
-        requires:
-          - build
-        filters:
-          branches:
-            only: master
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
