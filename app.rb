@@ -3,7 +3,7 @@
 require 'sinatra'
 
 get '/' do
-  'Hello Kotaroooo0!'
+  'Hey!'
 end
 
 get '/health_check' do
