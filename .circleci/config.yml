@@ -72,7 +72,7 @@ jobs:
       - run:
           name: migration
           command: |
-            aws ecs run-task --cluster sample-ecs-cluster --task-definition rails-migrate
+            aws ecs run-task --cluster sample-ecs-cluster --task-definition webapp-migration
 
 workflows:
   version: 2
