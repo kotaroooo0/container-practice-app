@@ -67,8 +67,12 @@ jobs:
           name: deploy
           command: |
             aws ecs describe-task-definition --task-definition webapp-service | jq '.taskDefinition | { containerDefinitions: .containerDefinitions }' > definition.json
-            aws ecs register-task-definition --family webapp-service --cli-input-json file://definition.json
+            aws ecs register-task-definition --execution-role-arn arn:aws:iam::260892174375:role/ecs-task-role --family webapp-service --cli-input-json file://definition.json
             aws ecs update-service --cluster sample-ecs-cluster --service webapp-service --task-definition webapp-service
+      - run:
+          name: migration
+          command: |
+            aws ecs run-task --cluster sample-ecs-cluster --task-definition rails-migrate
 
 workflows:
   version: 2
