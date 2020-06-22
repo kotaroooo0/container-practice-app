@@ -1,0 +1,28 @@
+<html>
+<head>
+  <title>Posts</title>
+</head>
+<body>
+  <h1>艦娘リスト</h1>
+  <p>
+    好きな艦娘を書いていきましょう。
+  </p>
+  <form action="posts" method="POST">
+    <div>
+      title:<input type="text" name="title" value="">
+    </div>
+    <div>
+      <input type="submit" value="submit">
+    </div>
+  </form>
+  <% if @posts.present? %>
+  <div>
+    <ul>
+      <% @posts.each do |post|%>
+        <li><%= post.title %></li>
+      <% end%>
+    </ul>
+  </div>
+    <% end%>
+</body>
+</html>
