@@ -9,7 +9,8 @@ get '/' do
 end
 
 get '/wei' do
-  return 'yo'
+  puts 'yo'
+  redirect '/wei', 303
 end
 
 post '/posts' do
