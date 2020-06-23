@@ -8,6 +8,10 @@ get '/' do
   erb :index
 end
 
+get '/wei' do
+  return 'yo'
+end
+
 post '/posts' do
   title = params[:title]
   post = Post.new(title: title)
