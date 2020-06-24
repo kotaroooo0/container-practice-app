@@ -3,54 +3,37 @@ on:
   push:
     branches: master
 jobs:
-  build-image:
+  deploy:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@master
-      - name: Setup Python 3.7 for awscli
-        uses: actions/setup-python@v1
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          version: '3.7'
-          architecture: 'x64'
-      - name: Install awscli
-        run: pip install --upgrade pip awscli
-      - name: Login to ECR
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-northeast-1
-        run: |
-          $(aws ecr get-login --no-include-email --region ap-northeast-1)
-      - name: Build & Push Image
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-1
+
+      - name:  Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build & Push Image to ECR
         env:
           ECR_DOMAIN: ${{ secrets.ECR_DOMAIN }}
         run: |
           docker build -t ${ECR_DOMAIN}:latest .
           docker push ${ECR_DOMAIN}:latest
-  deploy:
-    runs-on: ubuntu-18.04
-    needs: [build-image]
-    steps:
-      - uses: actions/checkout@master
-      - name: Setup Python 3.7 for awscli
-        uses: actions/setup-python@v1
-        with:
-          version: '3.7'
-          architecture: 'x64'
-      - name: Install awscli
-        run: pip install --upgrade pip awscli
-      - name: Login to ECR
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-northeast-1
-        run: |
-          $(aws ecr get-login --no-include-email --region ap-northeast-1)
-      - name: install jq
-        run: |
-          wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
-          mv jq-linux64 jq
-      - name: deploy
+
+      - name: Deploy Amazon ECS task definition
+        # uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        # with:
+        #   task-definition: ${{ steps.task-def.outputs.task-definition }}
+        #   service: ecs-devops-sandbox-service
+        #   cluster: ecs-devops-sandbox-cluster
+        #   wait-for-service-stability: true
+
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
