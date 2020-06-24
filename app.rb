@@ -8,8 +8,8 @@ get '/' do
   erb :index
 end
 
-get '/wei' do
-  'yo!!!!'
+get '/kawasaki' do
+  'drift'
 end
 
 post '/posts' do
