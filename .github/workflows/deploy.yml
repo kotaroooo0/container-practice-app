@@ -19,13 +19,6 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build & Push Image to ECR
-        env:
-          ECR_DOMAIN: ${{ secrets.ECR_DOMAIN }}
-        run: |
-          docker build -t ${ECR_DOMAIN}:latest .
-          docker push ${ECR_DOMAIN}:latest
-
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
@@ -36,7 +29,6 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
       - name: Deploy Amazon ECS task definition
         env:
