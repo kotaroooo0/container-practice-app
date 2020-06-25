@@ -65,7 +65,7 @@ jobs:
           aws ecs register-task-definition --execution-role-arn arn:aws:iam::260892174375:role/ecs-task-role --family webapp-service --cli-input-json file://definition.json
           aws ecs update-service --cluster sample-ecs-cluster --service webapp-service --task-definition webapp-service
 
-        - name: migrations
+      - name: migrations
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
