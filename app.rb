@@ -9,7 +9,7 @@ get '/' do
 end
 
 get '/kawasaki' do
-  'drift'
+  'DRIFT'
 end
 
 post '/posts' do
